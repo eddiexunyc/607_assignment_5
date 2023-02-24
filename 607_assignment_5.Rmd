@@ -14,7 +14,7 @@ Given a messy data, the goal is to tidy and transform data to suit the need for 
 
 ## Read CSV
 ```{r}
-
+readfile <- data.frame(read.csv)
 ```
 
 ## Including Plots
