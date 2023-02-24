@@ -1,0 +1,27 @@
+---
+title: "607_assignment_5"
+author: "Eddie Xu"
+date: "2023-02-24"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+## Data 607 Assignment 5
+Given a messy data, the goal is to tidy and transform data to suit the need for data analysis.
+
+## Read CSV
+```{r}
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+
+```
+
