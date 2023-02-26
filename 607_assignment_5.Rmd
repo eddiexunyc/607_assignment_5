@@ -68,8 +68,16 @@ airline_tidy_data <- rbind(alaska_tidy_data, amwest_tidy_data)
 knitr::kable(airline_tidy_data)
 ```
 
-##Data Analysis
+## Data Analysis
 Now that the data is in a tidy format, the data analysis can be done on the airline data.
+
+Let's see the arrival status in a bar graph
+```{r}
+##bar graph based on the arrival status by city.
+ggplot(airline_tidy_data, aes(x = City, y= Count, fill = `Arrival Status`)) +
+  geom_bar(stat = "identity", position = "dodge")
+```
+As shown, Phoenix have the highest count for "On-time" arrival status, compared to other cities.
 
 ```{r}
 ##summarize the data
@@ -79,13 +87,13 @@ airline_summary <- airline_tidy_data %>% group_by(`Airline`, `Arrival Status`) %
 head(airline_summary)
 ```
 
-Let's see the arrival status in a bar graph
+Comparison from a bar graph
 ```{r}
-##bar graph based on the arrival status by city.
-
-ggplot(airline_tidy_data, aes(City, y= Count, fill= `Arrival Status`)) +
+ggplot(airline_summary, aes(x = `Airline`, y = `Count`, fill = `Arrival Status`)) +
   geom_bar(stat = "identity", position = "dodge")
+
 ```
+
 
 ```{r}
 ```
