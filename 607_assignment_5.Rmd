@@ -14,14 +14,78 @@ Given a messy data, the goal is to tidy and transform data to suit the need for 
 
 ## Read CSV
 ```{r}
-readfile <- data.frame(read.csv)
+readfile <- data.frame(read.csv("https://raw.githubusercontent.com/eddiexunyc/607_assignment_5/main/tidy%20data.csv", header =TRUE))
+
+head(readfile)
 ```
 
-## Including Plots
+## Data Cleaning
+Since the csv file is untidy and does not follow the principle of tidy data where:
 
-You can also embed plots, for example:
+1) Every column is a variable
+2) Every row is an observation
+3) Every cell is a single value
+
+The data will be cleansed to reflect that.
+```{r}
+##split the data based on the row number
+alaska_df <- readfile[1:2,]
+amwest_df <- readfile[4:5,]
+```
+```{r}
+##rename the column 
+colnames(alaska_df) <- c("Airline", "Arrival Status", "Los Angeles", "Phoenix", "San Diego","San Francisco", "Seattle")
+
+##fill in the null value with new value for Alaska
+alaska_df$Airline[alaska_df$Airline == ""] <-c("ALASKA")
+
+##pivot longer the city and value
+alaska_tidy_data <- alaska_df %>%
+  pivot_longer(cols = c("Los Angeles", "Phoenix", "San Diego","San Francisco", "Seattle"), names_to = "City", values_to = "Count")
+
+knitr::kable(alaska_tidy_data)
+```
+
 
 ```{r}
+##rename the column
+colnames(amwest_df) <- c("Airline", "Arrival Status", "Los Angeles", "Phoenix", "San Diego","San Francisco", "Seattle")
 
+##fill in the null value with new value
+amwest_df$Airline[amwest_df$Airline == ""] <-c("AM WEST")
+
+##pivot longer the city and value
+amwest_tidy_data <- amwest_df %>%
+  pivot_longer(cols = c("Los Angeles", "Phoenix", "San Diego","San Francisco", "Seattle"), names_to = "City", values_to = "Count")
+
+knitr::kable(amwest_tidy_data)
 ```
 
+```{r}
+##combine both amwest and alaska dataframe together
+airline_tidy_data <- rbind(alaska_tidy_data, amwest_tidy_data)
+
+knitr::kable(airline_tidy_data)
+```
+
+##Data Analysis
+Now that the data is in a tidy format, the data analysis can be done on the airline data.
+
+```{r}
+##summarize the data
+airline_summary <- airline_tidy_data %>% group_by(`Airline`, `Arrival Status`) %>% 
+  summarize_at('Count', mean)
+
+head(airline_summary)
+```
+
+Let's see the arrival status in a bar graph
+```{r}
+##bar graph based on the arrival status by city.
+
+ggplot(airline_tidy_data, aes(City, y= Count, fill= `Arrival Status`)) +
+  geom_bar(stat = "identity", position = "dodge")
+```
+
+```{r}
+```
