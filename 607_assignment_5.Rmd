@@ -10,7 +10,7 @@ library(tidyverse)
 ```
 
 ## Data 607 Assignment 5
-Given a messy data, the goal is to tidy and transform data to suit the need for data analysis.
+Given a messy data, the goal is to tidy and transform data to suit the need for data analysis and to answer the question: Which airline provide a better service in term of flight quality?
 
 ## Read CSV
 ```{r}
@@ -77,6 +77,7 @@ Let's see the arrival status in a bar graph
 ggplot(airline_tidy_data, aes(x = City, y= Count, fill = `Arrival Status`)) +
   geom_bar(stat = "identity", position = "dodge")
 ```
+
 As shown, Phoenix have the highest count for "On-time" arrival status, compared to other cities.
 
 ```{r}
@@ -93,6 +94,7 @@ ggplot(airline_summary, aes(x = `Airline`, y = `Count`, fill = `Arrival Status`)
   geom_bar(stat = "identity", position = "dodge")
 
 ```
+
 
 
 ```{r}
