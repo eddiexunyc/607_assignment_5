@@ -32,6 +32,8 @@ The data will be cleansed to reflect that.
 alaska_df <- readfile[1:2,]
 amwest_df <- readfile[4:5,]
 ```
+
+After splitting the data by airline, each airline data will be cleaned up.
 ```{r}
 ##rename the column 
 colnames(alaska_df) <- c("Airline", "Arrival Status", "Los Angeles", "Phoenix", "San Diego","San Francisco", "Seattle")
@@ -73,7 +75,7 @@ Now that the data is in a tidy format, the data analysis can be done on the airl
 
 Let's see the arrival status in a bar graph
 ```{r}
-##bar graph based on the arrival status by city.
+#bar graph based on the arrival status by city.
 ggplot(airline_tidy_data, aes(x = City, y= Count, fill = `Arrival Status`)) +
   geom_bar(stat = "identity", position = "dodge")
 ```
@@ -81,7 +83,7 @@ ggplot(airline_tidy_data, aes(x = City, y= Count, fill = `Arrival Status`)) +
 As shown, Phoenix have the highest count for "On-time" arrival status, compared to other cities.
 
 ```{r}
-##summarize the data
+#summarize the data
 airline_summary <- airline_tidy_data %>% group_by(`Airline`, `Arrival Status`) %>% 
   summarize_at('Count', mean)
 
@@ -95,7 +97,24 @@ ggplot(airline_summary, aes(x = `Airline`, y = `Count`, fill = `Arrival Status`)
 
 ```
 
+Based on the graph, it shows that the AM WEST airline have more "on-time" arrival status than the ALASKA airline. Of course, this is not a definitive proof that the AM WEST airline is better than ALASKA airline.
 
-
+To see how well each airline performs, the ratio of "on-time" and "delayed" will be calculated to determine their performance in every cities.
 ```{r}
+#change the data format to include "on-time' and "delayed" column through pivot wider
+airline_tidy_data2 <- airline_tidy_data %>%
+  pivot_wider(names_from = "Arrival Status", values_from = "Count")
+
+airline_tidy_data2["Arrival Status Ratio"] <- round(airline_tidy_data2$`on time`/airline_tidy_data2$delayed, 2)
+
+knitr::kable(airline_tidy_data2)
 ```
+
+Chart view of the ratio
+```{r}
+ggplot(airline_tidy_data2, aes(x = `City`, y = `Arrival Status Ratio`, color = `Airline`)) +
+  geom_point()
+```
+
+## Conclusion
+In conclusion, despite the AM WEST airline have more "on-time" arrival flight than the ALASKA airline, the latter airline performs better due to on-time/delayed ratio.
